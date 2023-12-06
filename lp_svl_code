@@ -1,0 +1,15 @@
+folder_list= flist [];
+for fn in folder_list
+loop
+		list = freadb [fn,'line',generate_number];
+		db_name=tok_cat[fn,'.mdb'];
+		db_result = db_Open [ db_name,'create' ];
+		db_CreateField [ db_result, 'mol', 'molecule' ];
+		for seq in list
+		loop
+				chain_key = pro_SeqCreate [ seq , [conformation:'helix']];
+				my_mol=mol_Extract Atoms [];
+				e=db_Write[db_name, 0, [mol:my_mol]];
+				Close [force:1];
+			endloop;
+endloop;

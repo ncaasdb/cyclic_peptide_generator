@@ -1,0 +1,55 @@
+folder_list= flist [];
+for fn in folder_list
+loop
+		list = freadb [fn,'line',generate_number];
+		db_name=tok_cat[fn,'.mdb'];
+		db_result = db_Open [ db_name,'create' ];
+		db_CreateField [ db_result, 'mol', 'molecule' ];
+		for seq in list
+		loop
+				ck = pro_SeqCreate [ seq , [conformation:'helix']];
+				rl = oResidues ck;
+				rlu = rl(1);
+				cys1=0;
+				for r in rlu
+				loop
+						rsname = rName r;
+						if rsname == 'CYS' or rsname == 'DCY' then
+							if cys1 == 0 then
+								cys1 = r;
+							else
+								cys2 = r;
+							endif;
+						endif;
+					endloop;
+							
+				rk1 = cys1;
+				aklt1 = oAtoms rk1;
+
+				atom_list1=aklt1(1);
+				for a in atom_list1
+				loop
+						el_tokens1 = aElement a;
+						if el_tokens1 == 'S' then
+							s1_key=a;
+						endif;
+					endloop;
+					
+				residue_keys2 = cys2;
+				atom_key_lists2  = oAtoms      residue_keys2;
+
+				atom_list2=atom_key_lists2(1);
+				for a in atom_list2
+				loop
+						el_tokens2 = aElement a;
+						if el_tokens2 == 'S' then
+							s2_key=a;
+						endif;
+					endloop;
+
+				Bond [s1_key,s2_key];
+				my_mol=mol_Extract Atoms [];
+				e=db_Write[db_name, 0, [mol:my_mol]];
+				Close [force:1];
+			endloop;
+endloop;
