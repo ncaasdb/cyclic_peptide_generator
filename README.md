@@ -19,4 +19,3 @@ Follow the prompts to get the sequences of the cyclic peptide collection and the
 Cre_seq_generate.py is designed as an interactive script and can be packaged as an executable file for easy use.
 
 ## References
-[1] [Xinpei Wang, Anchored Stapling and Hierarchical Molecular Dynamics: A Synergistic Design of Tailored CREBBP Bromodomain Inhibitors Using Swift Parallel Simulations]
